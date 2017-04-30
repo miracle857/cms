@@ -1,0 +1,121 @@
+
+<script>
+$(function(){
+	$("form").off("submit");
+	$("form").on("submit",function(){
+		//异步提交
+		$("form").ajaxSubmit(function(){
+			$("form input").val("");//清空表单内容
+			alert("操作成功");
+		});
+		//阻止表单的默认提交行为
+		return false;
+	});
+});
+</script>	
+<div class="editingarea">
+	<div style="float:left;width:48%">
+		<div class="c_flex">
+			<span class="c_flexible"></span>
+		</div>
+		<div class="c_editview">
+			<div class="c_r_right_border">
+			<form action="#" method="post">
+				<div class="website_base">
+					<div class="c_condition website_condition dot_line">
+						<span class="yx_txt_center">添加友情链接</span>
+					</div>
+					<div class="divtable mt5">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0"
+							class="tab3">
+							<tbody>
+								<tr>
+									<td class="tr" width="80">链接名称：</td>
+									<td class="pl5"><input type="text" name="category.name"></td>
+								</tr>
+								<tr>
+									<td class="tr" width="80">链接地址：</td>
+									<td class="pl5"><input type="text" name="category.code"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="c_condition website_condition dot_line">
+						<button class="btn_gray mr5 ml5">添加</button>
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+		
+		<div class="c_editview">
+			<div class="c_r_right_border">
+			<form action="manager/updateBasicSet.action" method="post">
+				<div class="website_base">
+					<div class="c_condition website_condition dot_line">
+						<span class="yx_txt_center">基础设置链接</span>
+					</div>
+					<div class="divtable mt5">
+						<table width="100%" border="0" cellspacing="0" cellpadding="0"
+							class="tab3">
+							<tbody>
+								<tr>
+									<td class="tr" width="80">公司名称：</td>
+									<td class="pl5"><input  style="width:80%" type="text" name="" value="杰普软件科技有限公司"></td>
+								</tr>
+								<tr>
+									<td class="tr" width="80">公司地址：</td>
+									<td class="pl5"><input  style="width:80%" type="text" name="" value="昆山市巴城学院路828号"></td>
+								</tr>
+								<tr>
+									<td class="tr" width="80">版权信息：</td>
+									<td class="pl5"><input style="width:80%" type="text" name="" value="Copyright @ 2013 by Briup Technology,Inc. , All rights Reserved. ICP 05024518"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="c_condition website_condition dot_line">
+						<button class="btn_gray mr5 ml5">设置</button>
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div style="float:right;width:50%">
+		<div class="divtable">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0"
+				class="tab1">
+				<tbody>
+					<tr>
+						<th class="tl pl5">链接名称</th>
+						<th class="tl pl5">链接地址</th>
+						<th class="tl pl5">操作</th>
+					</tr>
+					<tr>
+						<td class="pl5">百度</td>
+						<td class="pl5">
+							<span class="fontLv">http://www.baidu.com</span>
+						</td>
+						<td class="pl5">
+							<span class="ico_edit"></span>
+							<span class="ico_del ml5"></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="pl5">杰普软件科技有限公司</td>
+						<td class="pl5">
+							<span class="fontLv">http://www.briup.com</span>
+						</td>
+						<td class="pl5">
+							<span class="ico_edit"></span>
+							<span class="ico_del ml5"></span>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+</div>

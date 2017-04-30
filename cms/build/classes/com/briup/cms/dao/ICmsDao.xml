@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.briup.cms.dao.ICmsDao">
+	
+	<!-- 保存category -->
+	<insert id="saveCategory" parameterType="Category">
+		<selectKey keyProperty="id" order="BEFORE" resultType="Long">
+			select cms_seq.nextval from dual
+		</selectKey>
+		insert into tbl_category(id,code,name)
+		values(#{id},#{code},#{name})
+	</insert>
+	
+	<!-- 根据ID查询一个栏目 -->
+	<select id="findCategoryByid" parameterType="Long" resultType="Category">
+		select * from tbl_category
+		where id=#{id}
+	</select>
+	<!-- 查询所有category -->
+	<select id="listAllCategory" resultType="Category" >
+		select * from tbl_category
+	</select>
+	
+	<!-- 保存article信息 -->
+	<insert id="saveArticle" parameterType="Article">
+		<selectKey keyProperty="id" order="BEFORE" resultType="Long">
+			select cms_seq.nextval from dual
+		</selectKey>
+		insert into tbl_article(id,author,clickTimes,content,publisurDate,title,c_id)
+		values(#{id},#{author},#{clickTimes},#{content},#{publisurDate},#{title},#{category.id})
+	</insert>
+	
+	<!-- 查询所有的文章信息 -->
+	<select id="listAllArtcles" resultMap="ArticleMap">
+		select * from tbl_article
+	</select>
+	<resultMap type="Article" id="ArticleMap">
+		<id property="id" column="id"/>
+		<result property="author" column="author"/>
+		<result property="clickTimes" column="clickTimes"/>
+		<result property="content" column="content"/>
+		<result property="publisurDate" column="publisurDate"/>
+		<result property="title" column="title"/>
+		<collection property="category" column="c_id" select="findCategoryByid"></collection>		
+	</resultMap>
+	<select id="findArticleById" parameterType="Long" resultMap="ArticleMap">
+		select * from tbl_article where id=#{id}
+	</select>
+	
+	<!-- 更新文章的点击次数 -->
+	<update id="updateArticleClickTimes" parameterType="Article">
+		update tbl_article
+		set clickTimes=#{clickTimes}
+		where id=#{id}
+	</update>
+	
+	<!-- 删除category -->
+	<delete id="deleteCategoryById" parameterType="Long">
+		delete from tbl_category
+		where id=#{id}
+	</delete>
+	
+	<!-- 删除article -->
+	<delete id="deleteArticle" parameterType="category">
+		delete from tbl_article
+		where c_id=#{id}
+	</delete>
+	
+	<delete id="deleteArticleById" parameterType="Long">
+		delete from tbl_article
+		where id=#{id}
+	</delete>
+	
+	<!-- 模糊查询文章及其内容 -->
+	<select id="searchArticle" parameterType="Article" resultMap="ArticleMap" >
+<!-- 	SELECT * FROM 
+(
+   SELECT A.*, ROWNUM RN
+   FROM (SELECT * FROM tbl_article) A
+   WHERE ROWNUM <= 6
+)
+WHERE RN >= 1 -->
+select * from
+		(select A.*,rownum rn
+		from(
+			select * from tbl_article
+			<where>
+				<choose>
+					<when test="content == null">
+					</when>
+					<when test="title!=null">
+						title like #{content}
+					</when>
+					<when test="author!=null">
+						author like #{content}
+					</when>
+					<!-- <when test="category.name!=null">
+						c_id = #{category.id}
+					</when> -->
+					<otherwise>
+						title like #{content} or author like #{content} 
+					</otherwise>
+				</choose>
+			</where>
+			) A
+			where rownum &lt;=#{clickTimes}
+			)
+			WHERE RN >= #{id}
+	</select>
+</mapper>
